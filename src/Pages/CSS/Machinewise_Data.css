@@ -1,0 +1,140 @@
+/* Form container */
+.form-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+/* Styled dropdown & inputs */
+.form-container select,
+.form-container input[type="date"] {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Styled button */
+.button {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+/* Table styling */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  font-size: 14px;
+}
+
+.table thead {
+  background-color: #f4f4f4;
+}
+
+.table th {
+  font-weight: bold;
+}
+/* Scrollable table container */
+.table-scroll-container {
+  max-height: 60vh;      /* adjust height based on viewport */
+  overflow-y: auto;      /* vertical scroll inside container */
+  overflow-x: auto;      /* horizontal scroll if needed */
+  border: 1px solid #ddd;
+  margin-top: 10px;
+}
+
+/* Optional: keep header visible when scrolling */
+.table-scroll-container thead th {
+  position: sticky;
+  top: 0;
+  background: #f4f4f4;
+  z-index: 1;
+}
+/* Inputs + Buttons */
+.form-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+/* Dropdown & Date Inputs */
+.form-container select,
+.form-container input[type="date"] {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Styled Buttons */
+.button {
+  background-color: #3182ce;
+  color: white;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+.button:hover {
+  background-color: #007bff;
+}
+
+/* Push Download PDF button to the right */
+.download-container {
+  margin-left: auto; /* pushes to the right */
+}
+
+/* Scrollable Table Container */
+.table-scroll-container {
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 1px solid #ddd;
+}
+
+/* Sticky Table Header */
+.table-scroll-container thead th {
+  position: sticky;
+  top: 0;
+  background: #f4f4f4;
+  z-index: 1;
+}
+
+/* Basic Table Styling */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  font-size: 14px;
+}
+.table thead {
+  background-color: #f4f4f4;
+}

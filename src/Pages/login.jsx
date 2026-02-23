@@ -51,8 +51,12 @@ function LoginPage() {
 
         {/* Right Side - Welcome Section */}
         <div className="login-right">
-          <h2 style={{ fontFamily: 'sans-serif', fontWeight: '500', fontSize: '2rem' }}>
-            Godrej & Boyce - Traceability
+          <h2 style={{ alignContent: 'left', fontFamily: 'sans-serif', fontWeight: '700', fontSize: '2rem' , color:'whitesmoke'}}>
+            Godrej & Boyce
+          </h2>
+          <br />
+          <h2 style={{ fontFamily: 'sans-serif', fontWeight: '700', fontSize: '1.5rem' , color:'whitesmoke'}}>
+         Traceability 
           </h2>
           <br />
           <h1>Welcome Back!</h1>

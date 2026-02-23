@@ -1,53 +1,3 @@
-// import React from 'react';
-// import { NavLink } from 'react-router-dom';
-// import './Navbar.css';
-// import Godrej_multiLogo from '../../assets/goderej_and_multiquadrant_logo.jpeg';
-
-// const Navbar = () => {
-//   return (
-//     <div className="nav">
-//       <img src={Godrej_multiLogo} alt="Godrej Logo" className="logo" />
-//       <ul className="navlinks">
-//         <li>
-//           <NavLink
-//             to="/"
-//             className={({ isActive }) => (isActive ? 'active' : 'inactive')}
-//           >
-//             Home
-//           </NavLink>
-//         </li>
-//         <li>
-//           <NavLink
-//             to="/traceability"
-//             className={({ isActive }) => (isActive ? 'active' : 'inactive')}
-//           >
-//             Traceability
-//           </NavLink>
-//         </li>
-//         <li>
-//           <NavLink
-//             to="/histogram"
-//             className={({ isActive }) => (isActive ? 'active' : 'inactive')}
-//           >
-//             Histogram
-//           </NavLink>
-//         </li>
-//         <li>
-//           <NavLink
-//             to="/about"
-//             className={({ isActive }) => (isActive ? 'active' : 'inactive')}
-//           >
-//             About
-//           </NavLink>
-//         </li>
-//       </ul>
-//     </div>
-//   );
-// };
-
-// export default Navbar;
-
-
 
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -97,8 +47,11 @@ const Navbar = () => {
           <NavLink to="/api/graphs" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Graphs</NavLink>
         </li>
         <li>
-          <NavLink to="/api/about" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>About</NavLink>
+          <NavLink to="/api/machine-wise" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Machine Data</NavLink>
         </li>
+        {/* <li>
+          <NavLink to="/api/about" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>About</NavLink>
+        </li> */}
       </div>
 
       <button className="menu-toggle" onClick={toggleMenu}>

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 import './CSS/upload.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -19,19 +19,27 @@ export default function ExcelUploader() {
     cells: Array.from({ length: 9 }, () => ({ id: '', ocv: '', ir: '', hrd: '' }))
   });
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile && selectedFile.name.endsWith('.xlsx')) {
       setFile(selectedFile);
       setStatus('');
       const reader = new FileReader();
-      reader.onload = (event) => {
-        const data = new Uint8Array(event.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        setPreviewData(jsonData);
+      reader.onload = async (event) => {
+        try {
+          const buffer = event.target.result;
+          const workbook = new ExcelJS.Workbook();
+          await workbook.xlsx.load(buffer);
+          const worksheet = workbook.worksheets[0];
+          const rows = [];
+          worksheet.eachRow({ includeEmpty: true }, (row) => {
+            rows.push(row.values.slice(1));
+          });
+          setPreviewData(rows);
+        } catch (err) {
+          setStatus('Error reading file.');
+          console.error(err);
+        }
       };
       reader.readAsArrayBuffer(selectedFile);
     } else {
@@ -40,20 +48,28 @@ export default function ExcelUploader() {
     }
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = async (e) => {
     e.preventDefault();
     const droppedFile = e.dataTransfer.files[0];
     if (droppedFile && (droppedFile.name.endsWith('.xlsx') || droppedFile.name.endsWith('.XLSX'))) {
       setFile(droppedFile);
       setStatus('');
       const reader = new FileReader();
-      reader.onload = (event) => {
-        const data = new Uint8Array(event.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        setPreviewData(jsonData);
+      reader.onload = async (event) => {
+        try {
+          const buffer = event.target.result;
+          const workbook = new ExcelJS.Workbook();
+          await workbook.xlsx.load(buffer);
+          const worksheet = workbook.worksheets[0];
+          const rows = [];
+          worksheet.eachRow({ includeEmpty: true }, (row) => {
+            rows.push(row.values.slice(1));
+          });
+          setPreviewData(rows);
+        } catch (err) {
+          setStatus('Error reading file.');
+          console.error(err);
+        }
       };
       reader.readAsArrayBuffer(droppedFile);
     } else {
