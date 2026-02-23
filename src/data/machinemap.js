@@ -21,13 +21,13 @@ const MACHINE_MAP = {
     cell_main: [],
     battery_main: [],
     batch_main: [],
-    electrode: ["electrode_id", "IR_temp_1", "IR_temp_2", "chain_speed", "zone_temp_1", "zone_temp_2", "anode_type"]
+    electrode: ["electrode_id", "IR_temp_1", "IR_temp_2", "chain_speed", "zone_temp_1", "zone_temp_2", "electrode_type"]
   },
   cathodeOven: {
     cell_main: [],
     battery_main: [],
     batch_main: [],
-    electrode: ["electrode_id", "IR_temp_1", "IR_temp_2", "IR_temp_3", "chain_speed", "zone_temp_1", "zone_temp_2", "anode_type"]
+    electrode: ["electrode_id", "IR_temp_1", "IR_temp_2", "IR_temp_3", "chain_speed", "zone_temp_1", "zone_temp_2", "electrode_type"]
   },
   powderHandling: {
     cell_main: [],
