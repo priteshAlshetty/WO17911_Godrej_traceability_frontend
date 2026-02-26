@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import axios from "axios";
 import "./CSS/BatteryTables.css";
@@ -8,7 +6,7 @@ import downloadPDF from "../utils/downloadPdf";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const BatteryTraceByDate = () => {
-  const [dateInput, setDateInput] = useState("2020-05-19");
+  const [dateInput, setDateInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [batteryData, setBatteryData] = useState([]);
@@ -123,7 +121,7 @@ const BatteryTraceByDate = () => {
 
       {loading && (
         <div style={{ textAlign: "center", margin: "20px 0" }}>
-          <img src="/Animation_searching_pages.gif" alt="Loading..." width="300" style={{ mixBlendMode: "multiply" }} />
+          <img src="/src/assets/Animation_searching_pages.gif" alt="Loading..." width="300" style={{ mixBlendMode: "multiply" }} />
           <p>Loading data, please wait...</p>
         </div>
       )}

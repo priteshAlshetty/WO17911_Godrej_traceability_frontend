@@ -112,4 +112,59 @@ body {
   text-align: center;
 }
 
+/* Skeleton Loader Styles */
+.card-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 0%,
+    #e0e0e0 50%,
+    #f0f0f0 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-header {
+  height: 20px;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.skeleton-name {
+  height: 18px;
+  width: 85%;
+  margin: 0 auto;
+  border-radius: 4px;
+}
+
+.skeleton-icon {
+  height: 70px;
+  width: 80px;
+  margin: 5px auto;
+  border-radius: 4px;
+}
+
+.skeleton-text {
+  height: 14px;
+  width: 90%;
+  margin: 0 auto;
+  border-radius: 4px;
+}
 

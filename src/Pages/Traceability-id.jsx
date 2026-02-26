@@ -23,7 +23,7 @@ const BatteryTable = () => {
 
     try {
       if (searchType === "battery") {
-        const res = await fetch("http://localhost:5000/api/batteryIds");
+        const res = await fetch(`${API_BASE_URL}/batteryIds`);
         const result = await res.json();
         if (result?.result?.DBStatus) {
           setSuggestions(
@@ -33,7 +33,7 @@ const BatteryTable = () => {
           );
         }
       } else if (searchType === "cell") {
-        const res = await fetch("http://localhost:5000/api/cellIds");
+        const res = await fetch(`${API_BASE_URL}/cellIds`);
         const result = await res.json();
         if (result?.result?.DBStatus) {
           setSuggestions(

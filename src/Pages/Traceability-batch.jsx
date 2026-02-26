@@ -8,7 +8,7 @@ import downloadPDF from '../utils/downloadPdf'; // your existing PDF utility
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const BatchSearch = () => {
-  const [batchId, setBatchId] = useState('BATCH028');
+  const [batchId, setBatchId] = useState('');
   const [batchData, setBatchData] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -66,6 +66,7 @@ const BatchSearch = () => {
       <h2>Traceability by Batch</h2>
 
       <div style={{ marginBottom: '1rem' }}>
+        
         <input
           type="text"
           placeholder="Enter Batch ID"
