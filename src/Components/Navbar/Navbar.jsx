@@ -21,20 +21,20 @@ const Navbar = () => {
           <NavLink to="/api/" end className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Home</NavLink>
         </li>
 
-       <li className="dropdown">
-  <span className="dropdown-toggle">Traceability ▾</span>
-  <ul className="dropdown-menu">
-    <li>
-      <NavLink to="/api/traceability/id" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>ID Wise</NavLink>
-    </li>
-    <li>
-      <NavLink to="/api/traceability/batch" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Batch Wise</NavLink>
-    </li>
-    <li>
-      <NavLink to="/api/traceability/date" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Date Wise</NavLink>
-    </li>
-  </ul>
-</li>
+        <li className="dropdown">
+          <span className="dropdown-toggle">Traceability ▾</span>
+          <ul className="dropdown-menu">
+            <li>
+              <NavLink to="/api/traceability/id" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>ID Wise</NavLink>
+            </li>
+            <li>
+              <NavLink to="/api/traceability/batch" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Batch Wise</NavLink>
+            </li>
+            <li>
+              <NavLink to="/api/traceability/date" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Date Wise</NavLink>
+            </li>
+          </ul>
+        </li>
 
 
         <li>
@@ -48,6 +48,9 @@ const Navbar = () => {
         </li>
         <li>
           <NavLink to="/api/machine-wise" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Machine Data</NavLink>
+        </li>
+        <li>
+          <NavLink to="/api/ems-individual" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Ems</NavLink>
         </li>
         {/* <li>
           <NavLink to="/api/about" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>About</NavLink>

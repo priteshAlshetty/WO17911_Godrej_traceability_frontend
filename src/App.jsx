@@ -13,6 +13,7 @@ import About from './Pages/About';
 import Login from './Pages/login';
 import Date from './Pages/Traceability-date';
 import Machinewise from './Pages/Machinewise_Data';
+import EmsIndividual from './Pages/Ems_Individual';
 import Footer from './Components/Footer/Footer';
 
 // Wrapper to use hooks outside of <Router>
@@ -48,6 +49,7 @@ const App = () => {
         <Route path="/api" element={<Homepage />} />
         <Route path="/api/machine-wise" element={<Machinewise />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/api/ems-individual" element={<EmsIndividual />} />
       </Routes>
       </div>
      <Footer/>
