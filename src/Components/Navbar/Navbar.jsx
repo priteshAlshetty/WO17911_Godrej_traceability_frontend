@@ -52,6 +52,11 @@ const Navbar = () => {
         <li>
           <NavLink to="/api/ems-individual" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Ems</NavLink>
         </li>
+                  <NavLink to="/api/connectivity-status" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Connectivity Status</NavLink>
+
+
+
+        
         {/* <li>
           <NavLink to="/api/about" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>About</NavLink>
         </li> */}

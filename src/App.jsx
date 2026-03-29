@@ -14,6 +14,7 @@ import Login from './Pages/login';
 import Date from './Pages/Traceability-date';
 import Machinewise from './Pages/Machinewise_Data';
 import EmsIndividual from './Pages/Ems_Individual';
+import Dashboard_homepage from './Pages/Dashboard_homepage';
 import Footer from './Components/Footer/Footer';
 
 // Wrapper to use hooks outside of <Router>
@@ -46,10 +47,11 @@ const App = () => {
         <Route path="/api/upload" element={<Upload />} />
         <Route path="/api/download" element={<Download />} />
         <Route path="/api/about" element={<About />} />
-        <Route path="/api" element={<Homepage />} />
         <Route path="/api/machine-wise" element={<Machinewise />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/api/ems-individual" element={<EmsIndividual />} />
+        <Route path="/api/connectivity-status" element={<Homepage />} />
+        <Route path="/api" element={<Dashboard_homepage />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
       </div>
      <Footer/>
