@@ -3,11 +3,14 @@ import Chart from "react-apexcharts";
 
 export default function BarChart({ title, x, series, yTitle }) {
 
-  // Convert values to numbers
+  // Convert values to numbers - always return array
   const safeSeries = series?.map(s => ({
     ...s,
-    data: s.data?.map(v => Number(v))
-  }));
+    data: s.data?.map(v => Number(v)) || []
+  })) || [];
+
+  // Convert x-axis to timestamps - always return array
+  const safeX = x?.map(d => new Date(d).getTime()) || [];
 
   const options = {
     chart: {
@@ -16,8 +19,27 @@ export default function BarChart({ title, x, series, yTitle }) {
       stacked: false,
       animations: { enabled: false },
 
+      zoom: {
+        enabled: true,
+        type: "x",
+        autoScaleYaxis: true
+      },
+      pan: {
+        enabled: true,
+        type: "x"
+      },
+
       toolbar: {
-        show: true
+        show: true,
+        tools: {
+          download: true,
+          selection: true,
+          zoom: true,
+          zoomin: true,
+          zoomout: true,
+          pan: true,
+          reset: true
+        }
       }
     },
 
@@ -39,9 +61,15 @@ export default function BarChart({ title, x, series, yTitle }) {
     },
 
     xaxis: {
-      categories: x,   // for bar chart normally categories instead of datetime
+      type: "datetime",
+      categories: safeX,
       title: {
         text: "Time"
+      },
+      labels: {
+        rotate: -45,
+        rotateAlways: true,
+        datetimeUTC: false
       }
     },
 

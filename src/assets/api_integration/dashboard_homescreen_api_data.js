@@ -4,7 +4,7 @@ export const getDashboardData = async ({data }) => {
 
   
 
-  return {
+  return data = {
     
 
   "Anode_Mixer_Batch_ID": "AMB-74829",

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getMeterData } from "../assets/api_integration/Individual_rawdata.js";
 import "./MeterDashboard.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 
 // import { ImPower } from "react-icons/im";
@@ -14,91 +15,94 @@ export default function MeterDashboard({ meterId, date }) {
 
   const [data, setData] = useState(null);
   const [selectedChart, setSelectedChart] = useState('Voltages');
-  const [selectedMeter, setSelectedMeter] = useState('HT1METER5');
-const [selectedDate, setSelectedDate] = useState('');  
-const [meters, setMeters] = useState([]);
-const [searchMeter, setSearchMeter] = useState('    ');
-const [searchDate, setSearchDate] = useState('2026-03-12');
+  const [selectedMeter, setSelectedMeter] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [meters, setMeters] = useState([]);
+  const [searchMeter, setSearchMeter] = useState('');
+  const [searchDate, setSearchDate] = useState('');
+  const [hasSearched, setHasSearched] = useState(false);
 
+  const handleSearch = async () => {
+    const meter = selectedMeter?.trim();
+    const dateValue = selectedDate?.trim();
 
-const handleSearch = async () => {
-
-  if (!selectedMeter || !selectedDate) {
-    alert("Please select meter and date");
-    return;
-  }
-
-  try {
-
-    const res = await getMeterData({
-      meterId: selectedMeter,
-      date: selectedDate
-    });
-
-    // check if valid data exists
-    if (
-      !res ||
-      !res.latest_reading ||
-      !res.continues_readings ||
-      !res.avg_reading ||
-      !res.continues_readings.date_time ||
-      res.continues_readings.date_time.length === 0
-    ) {
-      alert("No data found for selected meter and date");
-      return; // stop here → state will NOT change
+    if (!meter || !dateValue) {
+      alert("Please select meter and date");
+      return;
     }
 
-    // if data valid → update states
-    setSearchMeter(selectedMeter);
-    setSearchDate(selectedDate);
-    setData(res);
+    setHasSearched(true);
 
-  } catch (error) {
-    console.error("API error:", error);
-    alert("Failed to fetch data");
-  }
-};
-
-useEffect(() => {
-
-  async function loadMeters() {
     try {
-      const res = await fetch("http://localhost:3000/api/ems/navigation/all/meters");
-      const json = await res.json();
+      const res = await getMeterData({
+        meterId: meter,
+        date: dateValue
+      });
 
-      setMeters(json.data);
-    } catch (err) {
-      console.error("Failed to load meters", err);
+      // check if valid data exists
+      if (
+        !res ||
+        !res.latest_reading ||
+        !res.continues_readings ||
+        !res.avg_reading ||
+        !res.continues_readings.date_time ||
+        res.continues_readings.date_time.length === 0
+      ) {
+        alert("No data found for selected meter and date");
+        return; // stop here → state will NOT change
+      }
+
+      // if data valid → update states
+      setSearchMeter(meter);
+      setSearchDate(dateValue);
+      setData(res);
+    } catch (error) {
+      console.error("API error:", error);
+      alert("Failed to fetch data");
     }
-  }
+  };
 
-  loadMeters();
+  useEffect(() => {
 
-}, []);
+    async function loadMeters() {
+      try {
+        const res = await fetch(`${API_BASE_URL}/mfm/meterNames`);
+        const json = await res.json();
 
-useEffect(() => {
+        setMeters(json.data);
+      } catch (err) {
+        console.error("Failed to load meters", err);
+      }
+    }
 
-  if (!searchMeter || !searchDate) return;
+    loadMeters();
 
-  async function loadData() {
+  }, []);
 
-    const res = await getMeterData({
-      meterId: searchMeter,
-      date: searchDate
-    });
+  useEffect(() => {
+    if (!searchMeter?.trim() || !searchDate?.trim()) return;
 
-    setData(res);
-  }
+    async function loadData() {
+      const res = await getMeterData({
+        meterId: searchMeter.trim(),
+        date: searchDate.trim()
+      });
 
-  loadData();
+      setData(res);
+    }
 
-}, [searchMeter, searchDate]);
+    loadData();
+  }, [searchMeter, searchDate]);
 
-  if (!data) return <div>Loading...</div>;
+  const infoMessage = !data
+    ? hasSearched
+      ? "No data available for selected meter and date."
+      : "Please select meter and date."
+    : null;
 
-const latest = data?.latest_reading || {};
-const cont = data?.continues_readings || {};
-const avg = data?.avg_reading || {};
+  const latest = data?.latest_reading || {};
+  const cont = data?.continues_readings || {};
+  const avg = data?.avg_reading || {};
 
   const getChartData = (type) => {
     switch (type) {
@@ -195,55 +199,71 @@ const avg = data?.avg_reading || {};
       <div className="headerbar">
 
         <div className="logo-vishakha"><img src="/vishakha.jpg" alt="" /></div>
-       <div className="date-selection">
+        <div className="date-selection">
 
-<select className="meter-selection-dropdown"
-  value={selectedMeter}
-  onChange={(e) => setSelectedMeter(e.target.value)}
->
-  <option value="">Select Meter</option>
+          <select className="meter-selection-dropdown"
+            value={selectedMeter}
+            onChange={(e) => setSelectedMeter(e.target.value)}
+          >
+            <option value="">Select Meter</option>
 
-  {meters.map((meter) => (
-    <option key={meter} value={meter}>
-      {meter}
-    </option>
-  ))}
+            {meters.map((meter) => (
+              <option key={meter} value={meter}>
+                {meter}
+              </option>
+            ))}
 
-</select>
+          </select>
 
-<input
-  type="date"
-  value={selectedDate}
-  onChange={(e) => setSelectedDate(e.target.value)}
-/>
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+          />
 
-<button onClick={handleSearch}>
-  <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#3148ac"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>
-</button>
+          <button onClick={handleSearch}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#3148ac"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" /></svg>
+          </button>
 
-</div>
+        </div>
+        {infoMessage && (
+          <div className="info-banner">
+            {infoMessage}
+          </div>
+        )}
         <div className="id_info"><h4>
-Panel:{data.panel_id} | Meter: {data.meter_id} | Date: {data.date}
-</h4>  </div>
+          Panel:{data?.panel_id || '-'} | Meter: {data?.meter_id || '-'} | Date: {data?.date || '-'}
+        </h4>  </div>
         <div className="logo-mq"><img src="/multiquadrant.jpg" alt="" /></div>
       </div>
 
       <div className="card-parameter">
- 
-     <StatGroup
-    title="Voltages" 
-  items={[
-    { label: "V1", value: latest.voltage_v1, unit: "V" },
-    { label: <>V1 <span className="Avg-label">Avg</span></>, value: avg.voltage_v1, unit: "V" },
 
-    { label: "V2", value: latest.voltage_v2, unit: "V" },
-    { label: <>V2 <span className="Avg-label">Avg</span></>, value: avg.voltage_v2, unit: "V" },
+        <StatGroup
+          title="Voltages"
+          items={[
+            { label: "V1", value: latest.voltage_v1, unit: "V" },
+            { label: <>V1 <span className="Avg-label">Avg</span></>, value: avg.voltage_v1, unit: "V" },
 
-    { label: "V3", value: latest.voltage_v3, unit: "V" },
-    { label: <>V3 <span className="Avg-label">Avg</span></>, value: avg.voltage_v3, unit: "V" },
-  ]}
-/>
+            { label: "V2", value: latest.voltage_v2, unit: "V" },
+            { label: <>V2 <span className="Avg-label">Avg</span></>, value: avg.voltage_v2, unit: "V" },
 
+            { label: "V3", value: latest.voltage_v3, unit: "V" },
+            { label: <>V3 <span className="Avg-label">Avg</span></>, value: avg.voltage_v3, unit: "V" },
+          ]}
+        />
+
+        <StatGroup
+          title="Line Voltages"
+          items={[
+            { label: "Line Voltage 1", value: latest.line_v1, unit: "V" },
+            { label: <>Line Voltage 1 <span className="Avg-label">Avg</span></>, value: avg.line_v1, unit: "V" },
+            { label: "Line Voltage 2", value: latest.line_v2, unit: "V" },
+            { label: <>Line Voltage 2 <span className="Avg-label">Avg</span></>, value: avg.line_v2, unit: "V" },
+            { label: "Line Voltage 3", value: latest.line_v3, unit: "V" },
+            { label: <>Line Voltage 3 <span className="Avg-label">Avg</span></>, value: avg.line_v3, unit: "V" },
+          ]}
+        />
 
         <StatGroup
           title="Currents"
@@ -277,21 +297,21 @@ Panel:{data.panel_id} | Meter: {data.meter_id} | Date: {data.date}
           title="Power"
           items={[
             { label: "Active Power", value: latest.active_power, unit: "kW" },
-              { label: <>Active Power <span className="Avg-label">Avg</span></>, value: avg.active_power, unit: "kW" },
+            { label: <>Active Power <span className="Avg-label">Avg</span></>, value: avg.active_power, unit: "kW" },
             { label: "Apparent Power", value: latest.apparent_power, unit: "kVA" },
-              { label: <>Apparent Power <span className="Avg-label">Avg</span></>, value: avg.apparent_power, unit: "kVA" },
+            { label: <>Apparent Power <span className="Avg-label">Avg</span></>, value: avg.apparent_power, unit: "kVA" },
             { label: "Reactive Power", value: latest.reactive_power, unit: "kVAR" },
-              { label: <>Reactive Power <span className="Avg-label">Avg</span></>, value: avg.reactive_power, unit: "kVAR" },
+            { label: <>Reactive Power <span className="Avg-label">Avg</span></>, value: avg.reactive_power, unit: "kVAR" },
           ]}
         />
-        <StatGroup
+        {/* <StatGroup
           title="Demand"
           items={[
             { label: "kw demand", value: latest.kw_demand, unit: "kW" },
             { label: <>kw demand <span className="Avg-label">Avg</span></>, value: avg.kw_demand, unit: "kW" },
 
           ]}
-        />
+        /> */}
         <StatGroup
           title="Active Energy"
           items={[
@@ -300,7 +320,7 @@ Panel:{data.panel_id} | Meter: {data.meter_id} | Date: {data.date}
 
           ]}
         />
-        <StatGroup
+        {/* <StatGroup
           title="Harmonics"
           items={[
             { label: "THD V", value: latest.thd_v, unit: "%" },
@@ -308,44 +328,44 @@ Panel:{data.panel_id} | Meter: {data.meter_id} | Date: {data.date}
             { label: "THD I", value: latest.thd_i, unit: "%" },
             { label: <>THD I <span className="Avg-label">Avg</span></>, value: avg.thd_i, unit: "%" },
           ]}
-        />
+        /> */}
 
       </div>
-<div className="chart-select"><div className="chart-selection-btn">
-  <button 
-    onClick={() => setSelectedChart('Voltages')}
-    style={{ backgroundColor: selectedChart === 'Voltages' ? '#007bff' : '#f8f9fa', color: selectedChart === 'Voltages' ? 'white' : 'black' }}
-  >Voltages</button>
-  <button 
-    onClick={() => setSelectedChart('Currents')}
-    style={{ backgroundColor: selectedChart === 'Currents' ? '#007bff' : '#f8f9fa', color: selectedChart === 'Currents' ? 'white' : 'black' }}
-  >Currents</button>
-  <button 
-    onClick={() => setSelectedChart('Frequency')}
-    style={{ backgroundColor: selectedChart === 'Frequency' ? '#007bff' : '#f8f9fa', color: selectedChart === 'Frequency' ? 'white' : 'black' }}
-  >Frequency</button>
-  <button 
-    onClick={() => setSelectedChart('Power Factor')}
-    style={{ backgroundColor: selectedChart === 'Power Factor' ? '#007bff' : '#f8f9fa', color: selectedChart === 'Power Factor' ? 'white' : 'black' }}
-  >Power Factor</button>
-  <button 
-    onClick={() => setSelectedChart('Power')}
-    style={{ backgroundColor: selectedChart === 'Power' ? '#007bff' : '#f8f9fa', color: selectedChart === 'Power' ? 'white' : 'black' }}
-  >Power</button>
-  <button 
+      <div className="chart-select"><div className="chart-selection-btn">
+        <button
+          onClick={() => setSelectedChart('Voltages')}
+          style={{ backgroundColor: selectedChart === 'Voltages' ? '#007bff' : '#f8f9fa', color: selectedChart === 'Voltages' ? 'white' : 'black' }}
+        >Voltages</button>
+        <button
+          onClick={() => setSelectedChart('Currents')}
+          style={{ backgroundColor: selectedChart === 'Currents' ? '#007bff' : '#f8f9fa', color: selectedChart === 'Currents' ? 'white' : 'black' }}
+        >Currents</button>
+        <button
+          onClick={() => setSelectedChart('Frequency')}
+          style={{ backgroundColor: selectedChart === 'Frequency' ? '#007bff' : '#f8f9fa', color: selectedChart === 'Frequency' ? 'white' : 'black' }}
+        >Frequency</button>
+        <button
+          onClick={() => setSelectedChart('Power Factor')}
+          style={{ backgroundColor: selectedChart === 'Power Factor' ? '#007bff' : '#f8f9fa', color: selectedChart === 'Power Factor' ? 'white' : 'black' }}
+        >Power Factor</button>
+        <button
+          onClick={() => setSelectedChart('Power')}
+          style={{ backgroundColor: selectedChart === 'Power' ? '#007bff' : '#f8f9fa', color: selectedChart === 'Power' ? 'white' : 'black' }}
+        >Power</button>
+        {/* <button 
     onClick={() => setSelectedChart('Demand')}
     style={{ backgroundColor: selectedChart === 'Demand' ? '#007bff' : '#f8f9fa', color: selectedChart === 'Demand' ? 'white' : 'black' }}
-  >Demand</button>
-  <button 
-    onClick={() => setSelectedChart('Active Energy')}
-    style={{ backgroundColor: selectedChart === 'Active Energy' ? '#007bff' : '#f8f9fa', color: selectedChart === 'Active Energy' ? 'white' : 'black' }}
-  >Active Energy</button>
-  <button 
+  >Demand</button> */}
+        <button
+          onClick={() => setSelectedChart('Active Energy')}
+          style={{ backgroundColor: selectedChart === 'Active Energy' ? '#007bff' : '#f8f9fa', color: selectedChart === 'Active Energy' ? 'white' : 'black' }}
+        >Active Energy</button>
+        {/* <button 
     onClick={() => setSelectedChart('Harmonics')}
     style={{ backgroundColor: selectedChart === 'Harmonics' ? '#007bff' : '#f8f9fa', color: selectedChart === 'Harmonics' ? 'white' : 'black' }}
-  >Harmonics</button>
+  >Harmonics</button> */}
 
-</div></div>
+      </div></div>
       <MeterChart
         title={chartData.title}
         x={cont.date_time}
@@ -353,12 +373,12 @@ Panel:{data.panel_id} | Meter: {data.meter_id} | Date: {data.date}
         yTitle={chartData.yTitle}
       />
 
-<BarChart
-  title={chartData.title}
-  x={cont.date_time}
-  series={chartData.series}
-  yTitle={chartData.yTitle}
-/>
+      <BarChart
+        title={chartData.title}
+        x={cont.date_time}
+        series={chartData.series}
+        yTitle={chartData.yTitle}
+      />
 
     </div>
   );

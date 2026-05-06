@@ -6,11 +6,11 @@ export default function MeterChart({ title, x, series, yTitle }) {
   // ✅ Convert series values to numbers to avoid NaN errors
   const safeSeries = series?.map(s => ({
     ...s,
-    data: s.data?.map(v => Number(v))
-  }));
+    data: s.data?.map(v => Number(v)) || []
+  })) || [];
 
-  // ✅ Ensure x-axis dates are valid
-  const safeX = x?.map(d => new Date(d).getTime());
+  // ✅ Ensure x-axis dates are valid - always return array
+  const safeX = x?.map(d => new Date(d).getTime()) || [];
 
   const options = {
 
@@ -23,11 +23,36 @@ export default function MeterChart({ title, x, series, yTitle }) {
       zoom: {
         type: "x",
         enabled: true,
-        autoScaleYaxis: true
+        autoScaleYaxis: true,
+        zoomedArea: {
+          fill: {
+            color: "#90CAF9",
+            opacity: 0.4
+          },
+          stroke: {
+            color: "#0D47A1",
+            opacity: 0.4,
+            width: 1
+          }
+        }
+      },
+
+      pan: {
+        enabled: true,
+        type: "x"
       },
 
       toolbar: {
         show: true,
+        tools: {
+          download: true,
+          selection: true,
+          zoom: true,
+          zoomin: true,
+          zoomout: true,
+          pan: true,
+          reset: true
+        },
         autoSelected: "zoom"
       }
     },

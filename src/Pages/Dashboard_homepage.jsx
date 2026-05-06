@@ -1,6 +1,8 @@
 import React from 'react'
 import { getDashboardData } from '../assets/api_integration/dashboard_homescreen_api_data'
 // import { color } from 'echarts';
+import './Dashboard_homepage.css';
+import Chart from "react-apexcharts";
 
 const Dashboard_homepage = () => {
 
@@ -17,110 +19,216 @@ const Dashboard_homepage = () => {
 
   const formatLabel = (key) => key.replaceAll("_", " ");
 
-  const groups = [
   
+// ✅ Guard (important)
+if (!dashboardData) return <div>Loading...</div>;
+
+const comparisonBar = {
+  series: [
     {
-      title: "Cathode Cuts",
-      color: "rgb(13 71 161 / 82%)",
-      keys: [
-        "Cathode_Total_Cut_Count",
-        "Cathode_Accepted_Cut_Count",
-        "Cathode_Rejected_Cut_Count"
+      name: "Anode",
+      data: [
+        dashboardData.Anode_Total_Cut_Count,
+        dashboardData.Anode_Accepted_Cut_Count,
+        dashboardData.Anode_Rejected_Cut_Count,
+        dashboardData.Anode_Oven_Z1_Temp,
+        dashboardData.Anode_Oven_Z2_Temp,
+        dashboardData.Anode_Weighing_Accepted_Count,
+        dashboardData.Anode_Weighing_Rejected_Count
       ]
     },
     {
-      title: "Anode Cuts",
-      color: "#3fb954",
-      keys: [
-        "Anode_Total_Cut_Count",
-        "Anode_Accepted_Cut_Count",
-        "Anode_Rejected_Cut_Count"
-      ]
-    },
-    {
-      title: "Oven Temps",
-      color: "rgb(13 71 161 / 82%)",
-      keys: [
-        "Anode_Oven_Z1_Temp",
-        "Anode_Oven_Z2_Temp",
-        "Cathode_Oven_Z1_Temp",
-        "Cathode_Oven_Z2_Temp"
-      ]
-    },
-    {
-      title: "Production",
-      color: "rgb(227 79 68 / 80%)",
-      keys: ["Winding_Machine_Production"]
-    },
-    {
-      title: "Weighing",
-      color: "rgb(13 71 161 / 82%)",
-      keys: [
-        "Anode_Weighing_Accepted_Count",
-        "Anode_Weighing_Rejected_Count",
-        "Cathode_Weighing_Accepted_Count",
-        "Cathode_Weighing_Rejected_Count"
-      ]
-    },
-    {
-      title: "Final Stations",
-      color: "#3fb954",
-      keys: [
-        "Tab_to_terminal_Station_Production",
-        "Canister_Station_Production",
-        "Filling_Station_Production_Qty"
+      name: "Cathode",
+      data: [
+        dashboardData.Cathode_Total_Cut_Count,
+        dashboardData.Cathode_Accepted_Cut_Count,
+        dashboardData.Cathode_Rejected_Cut_Count,
+        dashboardData.Cathode_Oven_Z1_Temp,
+        dashboardData.Cathode_Oven_Z2_Temp,
+        dashboardData.Cathode_Weighing_Accepted_Count,
+        dashboardData.Cathode_Weighing_Rejected_Count
       ]
     }
-  ];
+  ],
+  options: {
+    chart: {
+      type: "bar"
+    },
+    plotOptions: { 
+      bar: {
+        horizontal: false,
+        columnWidth: "50%             "
+      }
+    },
+    colors: ["#007bff", "#17cc3e"],
+    xaxis: {
+      categories: [
+        "Total Cuts",
+        "Accepted Cuts",
+        "Rejected Cuts",
+        "Weighing Accepted",
+        "Weighing Rejected"
+      ]
+    },
+    title: {
+      text: "Anode vs Cathode Comparison"
+    },
+    dataLabels: {
+      enabled: false  
+    }
+  }
+};
 
-  return (<>
-  <div className="base-info" style={{display:"flex", gap:"40px", padding:"20px"}}>
-    <div style={{ padding: "10px", borderRadius: "5px",boxShadow: "0 2px 6px rgba(0,0,0,0.1)" }}><span style={{ fontWeight: "bold" }}>Anode Mixer Batch ID: </span>{dashboardData?.Anode_Mixer_Batch_ID}</div>
-    <div style={{ padding: "10px", borderRadius: "5px",boxShadow: "0 2px 6px rgba(0,0,0,0.1)" }}><span style={{ fontWeight: "bold" }}>Cathode Mixer Batch ID: </span>{dashboardData?.Cathoode_Mixer_Batch_ID}</div>
-  </div>
-  <hr />
-    <div style={{ padding: "20px 0px",backgroundColor:"#e3e0e0;" }}>
-      {dashboardData ? (
-        <div style={styles.container}>
-          {groups.map((group, index) => (
-            <div
-              key={index}
-              style={{ ...styles.card, background: group.color }}
-            >
-             <h3
-  style={{
-    fontSize: "30px",
-   
-    backgroundColor:
-    group.title === "Production" ? "rgb(227 79 68)" :
-      group.title === "Anode Cuts" ||
-      group.title === "Final Stations"
-        ? "rgb(25 159 48)"
-        : "#0d47a1",
-    // width: "100%",
-    padding: "10px 0",
-    paddingLeft: "16px",
-    margin: "0"
-  }}
->
-  {group.title}
-</h3>
+// 🔹 Temperature Line Chart
+const temperatureChart = {
+  series: [
+    {
+      name: "Anode",
+      data: [
+        dashboardData.Anode_Oven_Z1_Temp,
+        dashboardData.Anode_Oven_Z2_Temp
+      ]
+    },
+    {
+      name: "Cathode",
+      data: [
+        dashboardData.Cathode_Oven_Z1_Temp,
+        dashboardData.Cathode_Oven_Z2_Temp
+      ]
+    }
+  ],
+  options: {
+    chart: {
+      type: "line"
+    },
+    stroke: {
+      curve: "smooth"
+    },
+    xaxis: {
+      categories: ["Zone 1", "Zone 2"]
+    },
+    title: {
+      text: "Oven Temperature"
+    }
+  }
+};
 
-              {group.keys.map((key) => (
-                <div key={key} style={styles.row}>
-                  <span>{formatLabel(key)}</span>
-                  <strong>{dashboardData[key]}</strong>
-                </div>
-              ))}
-            </div>
-          ))}
+// 🔹 Efficiency Gauge
+const cathodeEff =
+  (dashboardData.Cathode_Accepted_Cut_Count /
+    dashboardData.Cathode_Total_Cut_Count) *
+  100;
+
+const anodeEff =
+  (dashboardData.Anode_Accepted_Cut_Count /
+    dashboardData.Anode_Total_Cut_Count) *
+  100;
+
+const radialChart = {
+  series: [
+    parseFloat(cathodeEff.toFixed(2)),
+    parseFloat(anodeEff.toFixed(2))
+  ],
+  options: {
+    chart: {
+      type: "radialBar"
+    },
+    labels: ["Cathode", "Anode"],
+    plotOptions: {
+      radialBar: {
+        dataLabels: {
+          value: {
+            formatter: (val) => val + "%"
+          }
+        }
+      }
+    },
+    title: {
+      text: "Efficiency (%)"
+    }
+  }
+};
+
+return (
+  <>
+    <div className="anode-cathode-container">
+      
+      {/* Anode Section */}
+      <div className="anode-container">
+        
+        <div className="anode-cuts">
+          <h3>Anode Cuts</h3>
+          <p>Total Cut Count: <span>{dashboardData?.Anode_Total_Cut_Count}</span></p>
+          <p>Accepted Cut Count: <span>{dashboardData?.Anode_Accepted_Cut_Count}</span></p>
+          <p>Rejected Cut Count: <span>{dashboardData?.Anode_Rejected_Cut_Count}</span></p>
         </div>
-      ) : (
-        <p>Loading...</p>
-      )}
-    </div></>
+
+        <div className="oven-temp">
+          <h3>Oven Temps</h3>
+          <p>Anode Oven Z1 Temp: <span>{dashboardData?.Anode_Oven_Z1_Temp}</span></p>
+          <p>Anode Oven Z2 Temp: <span>{dashboardData?.Anode_Oven_Z2_Temp}</span></p>
+        </div>
+
+        <div className="weighing">
+          <h3>Weighing</h3>
+          <p>Anode Accepted Count: <span>{dashboardData?.Anode_Weighing_Accepted_Count}</span></p>
+          <p>Anode Rejected Count: <span>{dashboardData?.Anode_Weighing_Rejected_Count}</span></p>
+        </div>
+
+      </div>
+
+      {/* Cathode Section */}
+      <div className="cathode-container">
+
+        <div className="cathode-cuts">
+          <h3>Cathode Cuts</h3>
+          <p>Total Cut Count: <span>{dashboardData?.Cathode_Total_Cut_Count}</span></p>
+          <p>Accepted Cut Count: <span>{dashboardData?.Cathode_Accepted_Cut_Count}</span></p>
+          <p>Rejected Cut Count: <span>{dashboardData?.Cathode_Rejected_Cut_Count}</span></p>
+        </div>
+
+        <div className="oven-temp">
+          <h3>Oven Temps</h3>
+          <p>Cathode Oven Z1 Temp: <span>{dashboardData?.Cathode_Oven_Z1_Temp}</span></p>
+          <p>Cathode Oven Z2 Temp: <span>{dashboardData?.Cathode_Oven_Z2_Temp}</span></p>
+        </div>
+
+        <div className="weighing">
+          <h3>Weighing</h3>
+          <p>Cathode Accepted Count: <span>{dashboardData?.Cathode_Weighing_Accepted_Count}</span></p>
+          <p>Cathode Rejected Count: <span>{dashboardData?.Cathode_Weighing_Rejected_Count}</span></p>
+        </div>
+
+      </div>
+
+      <div className="other-container">
+        <div className="others">
+           <h3>Other</h3>
+       < p>Winding Machine Production: <span>{dashboardData?.Winding_Machine_Production}</span></p>
+        <p>Tab to Terminal Station Production: <span>{dashboardData?.Tab_to_terminal_Station_Production}</span></p>
+        <p>Canister Station Production: <span>{dashboardData?.Canister_Station_Production}</span></p>
+        <p>Filling Station Production Qty: <span>{dashboardData?.Filling_Station_Production_Qty}</span></p>
+        </div>
+       
+      </div>
+
+    </div>
+
+    <div className="graph-section">
+  <div style={{ display: "grid", gap: "20px" }}>
     
-  )
+    <Chart
+  options={comparisonBar.options}
+  series={comparisonBar.series}
+  type="bar"
+  height={350}
+/>
+
+
+  </div>
+</div>
+  </>
+);
 }
 
 export default Dashboard_homepage;
