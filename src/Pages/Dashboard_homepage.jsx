@@ -9,13 +9,26 @@ const Dashboard_homepage = () => {
   const [dashboardData, setDashboardData] = React.useState(null);
 
   React.useEffect(() => {
-    const fetchDashboardData = async () => {
+  const fetchDashboardData = async () => {
+    try {
       const data = await getDashboardData({ data: {} });
       setDashboardData(data);
-    };
+    } catch (error) {
+      console.error("Dashboard API error:", error);
+    }
+  };
 
+  // initial call immediately
+  fetchDashboardData();
+
+  // refresh every 5 seconds
+  const interval = setInterval(() => {
     fetchDashboardData();
-  }, []);
+  }, 5000);
+
+  // cleanup on unmount
+  return () => clearInterval(interval);
+}, []);
 
   const formatLabel = (key) => key.replaceAll("_", " ");
 

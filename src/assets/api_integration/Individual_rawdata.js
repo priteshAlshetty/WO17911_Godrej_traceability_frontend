@@ -1,5 +1,7 @@
 // Downsample array to reduce datapoints for faster rendering
 // Keeps first/last points and samples evenly across the range
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const downsampleArray = (arr, maxPoints = 500) => {
   if (!arr || arr.length <= maxPoints) return arr;
   
@@ -28,7 +30,7 @@ export const getMeterData = async ({ meterId, date }) => {
   }
 
   try {
-    const url = new URL("http://192.168.1.194:5000/api/mfm/meterData");
+    const url = new URL(`${API_BASE_URL}/mfm/meterData`);
     url.searchParams.set("name", name);
     url.searchParams.set("date", dateValue);
 
