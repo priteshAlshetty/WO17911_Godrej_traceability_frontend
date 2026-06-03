@@ -4,7 +4,7 @@ import Navbar from './components/Navbar/Navbar';
 import '../src/App.css'
 
 import Home from './Pages/Traceability-id';
-import Homepage from './Pages/homepage';
+import ConnectivityStatus from './Pages/connectivity_status';
 import Traceability from './Pages/Traceability-batch';
 import Graphs from './Pages/Graphs';
 import Upload from './Pages/upload';
@@ -49,7 +49,7 @@ const App = () => {
         <Route path="/api/about" element={<About />} />
         <Route path="/api/machine-wise" element={<Machinewise />} />
         <Route path="/api/ems-individual" element={<EmsIndividual />} />
-        <Route path="/api/connectivity-status" element={<Homepage />} />
+        <Route path="/api/connectivity-status" element={<ConnectivityStatus />} />
         <Route path="/api" element={<Dashboard_homepage />} />
         <Route path="/login" element={<Login />} />
       </Routes>
