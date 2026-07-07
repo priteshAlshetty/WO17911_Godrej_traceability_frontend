@@ -1,0 +1,49 @@
+
+.energy-page{
+padding:20px;
+background:#f5f7fb;
+min-height:100vh;
+}
+.toolbar{
+display:flex;
+gap:15px;
+align-items:end;
+flex-wrap:wrap;
+margin-bottom:20px;
+}
+.input-group{
+display:flex;
+flex-direction:column;
+}
+.input-group label{
+font-weight:600;
+margin-bottom:5px;
+}
+.input-group input{
+padding:8px 10px;
+border:1px solid #ccc;
+border-radius:6px;
+}
+button{
+padding:10px 16px;
+border:none;
+border-radius:6px;
+background:#2563eb;
+color:#fff;
+cursor:pointer;
+}
+button:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+.chart-container{
+/* height:520px; */
+background:#fff;
+padding:20px;
+
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+.chart_container_all_machines{
+    height: 520px;
+}

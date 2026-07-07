@@ -71,7 +71,7 @@ h3 {
   padding: 6px 12px;
   border-radius: 8px;
   display: inline-block;
-  background: linear-gradient(135deg, #ffb347, #ffcc33); /* warm gradient */
+  background: linear-gradient(135deg, #673AB7, #3F51B5); /* warm gradient */
   box-shadow: 0 3px 8px rgba(0,0,0,0.15);
 }
 

@@ -26,6 +26,8 @@ export default function MeterDashboard({ meterId, date }) {
     const meter = selectedMeter?.trim();
     const dateValue = selectedDate?.trim();
 
+
+
     if (!meter || !dateValue) {
       alert("Please select meter and date");
       return;
@@ -196,9 +198,10 @@ export default function MeterDashboard({ meterId, date }) {
     <div className="aa"><video autoPlay loop muted playsInline className="video-background">
       <source src="/backgroundvideo.mp4" type="video/mp4" />
     </video>
+    < h4>EMS Individual Report</h4>
       <div className="headerbar">
 
-        <div className="logo-vishakha"><img src="/vishakha.jpg" alt="" /></div>
+        {/* <div className="logo-vishakha"><img src="/vishakha.jpg" alt="" /></div> */}
         <div className="date-selection">
 
           <select className="meter-selection-dropdown"
@@ -373,12 +376,12 @@ export default function MeterDashboard({ meterId, date }) {
         yTitle={chartData.yTitle}
       />
 
-      <BarChart
+      {/* <BarChart
         title={chartData.title}
         x={cont.date_time}
         series={chartData.series}
         yTitle={chartData.yTitle}
-      />
+      /> */}
 
     </div>
   );

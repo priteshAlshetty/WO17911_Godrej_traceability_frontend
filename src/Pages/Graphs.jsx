@@ -180,12 +180,12 @@ const GraphsPage = () => {
           >
             Graph by Filling Timestamp
           </button>
-          <button
+          {/* <button
             className={`mode-btn ${mode === 'histogram' ? 'active' : ''}`}
             onClick={() => setMode('histogram')}
           >
             Histogram
-          </button>
+          </button> */}
         </div>
 
         {/* Battery ID Input Mode */}

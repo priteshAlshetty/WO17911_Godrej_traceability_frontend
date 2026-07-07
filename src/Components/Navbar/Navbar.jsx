@@ -37,20 +37,36 @@ const Navbar = () => {
         </li>
 
 
-        <li>
+        {/* <li>
           <NavLink to="/api/upload" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Upload</NavLink>
         </li>
         <li>
           <NavLink to="/api/download" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Download</NavLink>
-        </li>
+        </li> */}
         <li>
           <NavLink to="/api/graphs" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Graphs</NavLink>
         </li>
         <li>
           <NavLink to="/api/machine-wise" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Machine Data</NavLink>
         </li>
-        <li>
-          <NavLink to="/api/ems-individual" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Ems</NavLink>
+        {/* <li>
+          <NavLink to="/api/ems-individual" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Energy</NavLink>
+        </li> */}
+
+         <li className="dropdown">
+          <span className="dropdown-toggle">Energy ▾</span>
+          <ul className="dropdown-menu">
+           
+            <li>
+              <NavLink to="/api/ems-individual" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>EMS Live</NavLink>
+            </li>
+            <li>
+              <NavLink to="/api/energy-graph" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>KWh </NavLink>
+            </li>
+            <li>
+              <NavLink to="/api/all-machines-data" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Machinewise Graph</NavLink>
+            </li>
+          </ul>
         </li>
                   <NavLink to="/api/connectivity-status" className={({ isActive }) => isActive ? 'active_link' : 'inactive_link'}>Connectivity Status</NavLink>
 

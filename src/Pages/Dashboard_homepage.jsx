@@ -44,10 +44,12 @@ const comparisonBar = {
         dashboardData.Anode_Total_Cut_Count,
         dashboardData.Anode_Accepted_Cut_Count,
         dashboardData.Anode_Rejected_Cut_Count,
-        dashboardData.Anode_Oven_Z1_Temp,
-        dashboardData.Anode_Oven_Z2_Temp,
-        dashboardData.Anode_Weighing_Accepted_Count,
-        dashboardData.Anode_Weighing_Rejected_Count
+         dashboardData.Anode_Weighing_Accepted_Count,
+           dashboardData.Anode_Weighing_Rejected_Count,
+        // dashboardData.Anode_Oven_Z1_Temp,
+        // dashboardData.Anode_Oven_Z2_Temp
+       
+      
       ]
     },
     {
@@ -56,10 +58,12 @@ const comparisonBar = {
         dashboardData.Cathode_Total_Cut_Count,
         dashboardData.Cathode_Accepted_Cut_Count,
         dashboardData.Cathode_Rejected_Cut_Count,
-        dashboardData.Cathode_Oven_Z1_Temp,
-        dashboardData.Cathode_Oven_Z2_Temp,
-        dashboardData.Cathode_Weighing_Accepted_Count,
-        dashboardData.Cathode_Weighing_Rejected_Count
+         dashboardData.Cathode_Weighing_Accepted_Count,
+          dashboardData.Cathode_Weighing_Rejected_Count,
+        // dashboardData.Cathode_Oven_Z1_Temp,
+        // dashboardData.Cathode_Oven_Z2_Temp
+       
+       
       ]
     }
   ],

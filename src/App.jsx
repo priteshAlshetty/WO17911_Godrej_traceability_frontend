@@ -15,6 +15,8 @@ import Date from './Pages/Traceability-date';
 import Machinewise from './Pages/Machinewise_Data';
 import EmsIndividual from './Pages/Ems_Individual';
 import Dashboard_homepage from './Pages/Dashboard_homepage';
+import EnergyGraph from './Pages/Energy_Graph';
+import Allmachinesdata from './Pages/AllMachinesEnergyReport';
 import Footer from './Components/Footer/Footer';
 
 // Wrapper to use hooks outside of <Router>
@@ -49,6 +51,8 @@ const App = () => {
         <Route path="/api/about" element={<About />} />
         <Route path="/api/machine-wise" element={<Machinewise />} />
         <Route path="/api/ems-individual" element={<EmsIndividual />} />
+         <Route path="/api/energy-graph" element={<EnergyGraph />} />
+         <Route path="/api/all-machines-data" element={<Allmachinesdata />} />
         <Route path="/api/connectivity-status" element={<ConnectivityStatus />} />
         <Route path="/api" element={<Dashboard_homepage />} />
         <Route path="/login" element={<Login />} />
