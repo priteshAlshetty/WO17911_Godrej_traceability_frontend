@@ -28,10 +28,11 @@
 }
 
 .card h3 {
+  
   margin-top: 0;
   margin-bottom: 1rem;
   font-size: 1.25rem;
-  color: #2c3e50;
+  color: #ffffff;
   border-bottom: 1px solid #ddd;
   padding-bottom: 8px;
 }
@@ -86,4 +87,11 @@
 
 .downlaod-report:hover {
   background-color: rgb(42, 64, 189);
+}
+
+.kwh-total{
+  background-color: #0042dd;
+  padding: 10px;
+  color: #045dbd;
+  font-weight: 700; 
 }

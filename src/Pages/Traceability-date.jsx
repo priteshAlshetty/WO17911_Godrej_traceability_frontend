@@ -6,7 +6,9 @@ import downloadPDF from "../utils/downloadPdf";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const BatteryTraceByDate = () => {
-  const [dateInput, setDateInput] = useState("");
+  // const [dateInput, setDateInput] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [batteryData, setBatteryData] = useState([]);
@@ -14,10 +16,15 @@ const BatteryTraceByDate = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    if (!dateInput) {
-      setError("Please select a date.");
-      return;
-    }
+    if (!fromDate || !toDate) {
+  setError("Please select From Date and To Date.");
+  return;
+}
+
+if (new Date(fromDate) > new Date(toDate)) {
+  setError("From Date cannot be greater than To Date.");
+  return;
+}
 
     setLoading(true);
     setError("");
@@ -25,7 +32,10 @@ const BatteryTraceByDate = () => {
     setElectrodeData([]);
 
     try {
-      const res = await axios.post(`${API_BASE_URL}/trace/date`, { date: dateInput });
+    const res = await axios.post(`${API_BASE_URL}/trace/date`, {
+  fromDate,
+  toDate,
+});
       const trace = res.data.trace;
 
       if (!trace || trace.length === 0) {
@@ -100,15 +110,46 @@ const BatteryTraceByDate = () => {
       <h2>Traceability by Date</h2>
 
       <form onSubmit={handleSearch} style={{ marginBottom: "1rem" }}>
-        <input
-          type="date"
-          value={dateInput}
-          onChange={(e) => setDateInput(e.target.value)}
-          style={{ padding: "0.5rem", fontSize: "1rem", marginRight: "0.5rem" }}
-        />
-        <button className="search_btn" type="submit" disabled={loading}>
-          {loading ? "Loading..." : "Search"}
-        </button>
+      <div
+  style={{
+    display: "flex",
+    gap: "10px",
+    alignItems: "center",
+    marginBottom: "10px",
+    flexWrap: "wrap",
+  }}
+>
+  <div>
+    <label style={{ marginRight: "5px" }}>From:</label>
+    <input
+      type="date"
+      value={fromDate}
+      onChange={(e) => setFromDate(e.target.value)}
+      style={{
+        padding: "0.5rem",
+        fontSize: "1rem",
+      }}
+    />
+  </div>
+
+  <div>
+    <label style={{ marginRight: "5px" }}>To:</label>
+    <input
+      type="date"
+      value={toDate}
+      onChange={(e) => setToDate(e.target.value)}
+      style={{
+        padding: "0.5rem",
+        fontSize: "1rem",
+      }}
+    />
+  </div>
+
+  <button className="search_btn" type="submit" disabled={loading}>
+    {loading ? "Loading..." : "Search"}
+  </button>
+</div>
+       
       </form>
 
       {!loading && (batteryData.length > 0 || electrodeData.length > 0) && (

@@ -43,6 +43,7 @@ const [meterName, setMeterName] = useState("");
 const chartRef = useRef(null);
 const currentChartRef = useRef(null);
 const [searched, setSearched] = useState(false);
+const [searchedMeter, setSearchedMeter] = useState("");
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 useEffect(() => {
@@ -86,7 +87,7 @@ const fetchMeterNames = async () => {
 }
         }
       );
-
+setSearchedMeter(meterName);
       setChartData(res.data.data);
     } catch (err) {
       console.log(err);
@@ -145,7 +146,7 @@ const downloadPDF = () => {
   pdf.setFont("helvetica", "normal");
   pdf.setFontSize(11);
 
-  pdf.text(`Meter : ${meterName}`, 15, 25);
+  pdf.text(`Meter : ${(searchedMeter).toLocaleUpperCase()}`, 15, 25);
   pdf.text(`From : ${from}`, 15, 32);
   pdf.text(`To : ${to}`, 70, 32);
 
@@ -157,6 +158,9 @@ const downloadPDF = () => {
   );
 
   pdf.line(10, 38, pageWidth - 10, 38);
+  pdf.setTextColor(0, 0, 255);
+  pdf.text(`${(meterName).toUpperCase()} - Total Consumption: ${totalConsumption.toFixed(2)} kWh`, 120, 44);
+  pdf.setTextColor(0, 0, 0);
 
   // =========================
   // First Chart
@@ -346,9 +350,30 @@ currentChart.update();
   },
 };
 
+const totalConsumption = chartData.reduce(
+  (total, item) => total + (Number(item.consumption_kwh) || 0),
+  0
+);
+
   return (
     <div className="energy-page">
-<h3>kwh Energy Graph</h3>
+<div
+  style={{
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "10px",
+  }}
+>
+  <h3>kWh Energy Graph</h3>
+
+  {chartData.length > 0 && (
+    <h2 className="kwh-total" style={{ color: "#fcfdff" }}>
+     {(searchedMeter).toUpperCase()} -Total Consumption: {totalConsumption.toFixed(2)} kWh
+    </h2>
+  )}
+</div>
+
     <div className="toolbar">
 
  <div className="input-group">

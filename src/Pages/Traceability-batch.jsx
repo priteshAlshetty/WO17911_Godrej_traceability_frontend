@@ -1,9 +1,11 @@
 
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import './CSS/traceability.css';
-import downloadPDF from '../utils/downloadPdf'; // your existing PDF utility
+import downloadPDF from '../utils/downloadPdf'; 
+import Select from "react-select";
+
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -12,13 +14,47 @@ const BatchSearch = () => {
   const [batchData, setBatchData] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [batchOptions, setBatchOptions] = useState([]);
+  
+
+  useEffect(() => {
+  fetchBatchIds();
+}, []);
+
+const fetchBatchIds = async () => {
+  try {
+    const res = await axios.get(`${API_BASE_URL}/batchIds`);
+
+    if (res.data?.result?.DBStatus) {
+      const options = res.data.result.Data
+        .filter(
+          (item) =>
+            item.batch_id &&
+            item.batch_id !== "null" &&
+            item.batch_id !== "undefined"
+        )
+        .map((item) => ({
+          value: item.batch_id,
+          label: item.batch_id,
+        }));
+
+      setBatchOptions(options);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
 
   const handleSearch = async () => {
+     if (!batchId) {
+    alert("Please select Batch ID");
+    return;
+  }
     setError('');
     setBatchData(null);
     setLoading(true);
 
-    const minLoading = new Promise((resolve) => setTimeout(resolve, 3000)); // minimum 3s loading
+    const minLoading = new Promise((resolve) => setTimeout(resolve, 2000)); // minimum 2s loading
 
     try {
       const responsePromise = axios.post(`${API_BASE_URL}/trace/batch-id`, {
@@ -67,33 +103,36 @@ const BatchSearch = () => {
 
       <div style={{ marginBottom: '1rem' }}>
         
-        <input
-          type="text"
-          placeholder="Enter Batch ID"
-          value={batchId}
-          onChange={(e) => setBatchId(e.target.value)}
-          style={{
-            padding: '0.5rem 1rem',
-            width: '300px',
-            marginRight: '1rem',
-            border: '1px solid #ccc',
-            borderRadius: '5px',
-          }}
-        />
+       <Select
+  options={batchOptions}
+  value={batchOptions.find((item) => item.value === batchId)}
+  onChange={(selected) => setBatchId(selected?.value || "")}
+  placeholder="Search Batch ID..."
+  isClearable
+  isSearchable
+  styles={{
+    container: (base) => ({
+      ...base,
+      width: 350,
+      display: "inline-block",
+      marginRight: "10px",
+    }),
+  }}
+/>
         <button
-          onClick={handleSearch}
-          style={{
-            backgroundColor: '#3182ce',
-            padding: '0.5rem 1rem',
-            marginLeft: '0.5rem',
-            fontSize: '1rem',
-            cursor: 'pointer',
-            color: '#fff',
-            border: 'none',
-          }}
-        >
-          Search
-        </button>
+  onClick={handleSearch}
+  disabled={!batchId || loading}
+  style={{
+    backgroundColor: "#3182ce",
+    color: "#fff",
+    padding: "0.5rem 1rem",
+    cursor: batchId ? "pointer" : "not-allowed",
+    opacity: batchId ? 1 : 0.5,
+    border: "none",
+  }}
+>
+  Search
+</button>
       </div>
 
       {loading && (
@@ -124,29 +163,41 @@ const BatchSearch = () => {
           </div>
   <h3 style={{ marginTop: '1rem', marginBottom: '1rem' }}>
               Batch ID:{' '}
-              <span style={{ color: '#007bff' }}>{batchData.batch_id}</span>
+              <span style={{ color: '#fefeff' }}>{batchData.batch_id}</span>
             </h3>
           <div className="card-container">
             {/* Hidden PDF Header */}
            
-<div className="header"> <div
+<div className="header" style={{ width: '100%',display: 'flex',justifyContent: 'center',alignItems: 'center' }}> <div
               className="pdf-header-only"
-              style={{ display: 'none', marginBottom: '20px' }}
+              style={{display:'none' , marginBottom: '20px' }}
             >
               <div
                 style={{
-                  display: 'flex',
+                  display: 'flex',width: '100%',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}
               >
-                <img
+                {/* <img
                   src="/src/assets/goderej_and_multiquadrant_logo.jpeg"
                   alt="Logo"
                   style={{ height: '60px' }}
-                />
-                <div style={{ flex: 1 }}></div>
-                <h2
+                /> */}
+                <div style={{ flex: 1 }}><h1 style={{ textAlign: 'center', marginTop: '10px' }}>
+                Batch Traceability Report
+              </h1></div>
+                 
+               
+              </div>
+              {/* <hr
+                style={{
+                  marginTop: '10px',
+                  border: '1px solid #000',
+                  width: '100%',
+                }}
+              /> */}
+              <h2
                   style={{
                     margin: 0,
                     fontSize: '14px',
@@ -155,17 +206,9 @@ const BatchSearch = () => {
                 >
                   Report Generated at: {new Date().toLocaleString()}
                 </h2>
-              </div>
-              <hr
-                style={{
-                  marginTop: '10px',
-                  border: '1px solid #000',
-                  width: '100%',
-                }}
-              />
-              <h1 style={{ textAlign: 'center', marginTop: '10px' }}>
-                Batch Traceability Report
-              </h1>
+              <h4 style={{ textAlign: 'center' }}>
+                Batch ID: {batchData.batch_id}
+              </h4>
             </div></div>
           <div className="content"> {renderCard('Batch Parameters', {
               mixing_time: batchData.mixing_time ?? 'Null',
