@@ -16,6 +16,11 @@ export default function DownloadCSV() {
     value: "anode_mixer",
   },
   {
+    label :"Cathode Mixer",
+    value : "cathode_mixer"
+
+  },
+  {
     label: "Anode Oven",
     value: "anode_oven",
   },
