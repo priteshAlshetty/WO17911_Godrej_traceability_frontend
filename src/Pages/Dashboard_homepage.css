@@ -108,3 +108,29 @@ h3 {
     flex: 1 1 100%;
   }
 }
+
+/* Industrial SCADA Output Field */
+.output-field {
+  display: inline-block;
+  min-width: 90px;
+  padding: 6px 12px;
+  margin-left: 8px;
+
+  background: #c8e4ff;
+  border: 1px solid #3b82a0;
+  border-radius: 5px;
+
+  color: #0b2d33;
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.5px;
+
+  box-shadow: inset 0 0 5px rgba(56, 217, 245, 0.12);
+  transition: border-color 0.2s ease;
+}
+
+.output-field:hover {
+  border-color: #38d9f5;
+}

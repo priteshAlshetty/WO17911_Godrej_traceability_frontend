@@ -5,9 +5,7 @@ import './Dashboard_homepage.css';
 import Chart from "react-apexcharts";
 
 const Dashboard_homepage = () => {
-
   const [dashboardData, setDashboardData] = React.useState(null);
-
   React.useEffect(() => {
   const fetchDashboardData = async () => {
     try {
@@ -21,10 +19,10 @@ const Dashboard_homepage = () => {
   // initial call immediately
   fetchDashboardData();
 
-  // refresh every 5 seconds
+  // refresh every 3 seconds
   const interval = setInterval(() => {
     fetchDashboardData();
-  }, 5000);
+  }, 3000);
 
   // cleanup on unmount
   return () => clearInterval(interval);
@@ -166,30 +164,34 @@ const radialChart = {
   }
 };
 
-return (
+return ( 
   <>
     <div className="anode-cathode-container">
       
       {/* Anode Section */}
       <div className="anode-container">
+         <div className="anode-cuts">
+          <h3>Anode Batch ID <span className="output-field">{dashboardData?.Anode_Mixer_Batch_ID}</span>  </h3>
+          
+        </div>
         
         <div className="anode-cuts">
-          <h3>Anode Cuts</h3>
-          <p>Total Cut Count: <span>{dashboardData?.Anode_Total_Cut_Count}</span></p>
-          <p>Accepted Cut Count: <span>{dashboardData?.Anode_Accepted_Cut_Count}</span></p>
-          <p>Rejected Cut Count: <span>{dashboardData?.Anode_Rejected_Cut_Count}</span></p>
+          <h3>Anode Cuts   </h3>
+          <p>Total Cut Count: <span className="output-field">{dashboardData?.Anode_Total_Cut_Count}</span></p>
+          <p>Accepted Cut Count: <span className="output-field">{dashboardData?.Anode_Accepted_Cut_Count}</span></p>
+          <p>Rejected Cut Count: <span className="output-field">{dashboardData?.Anode_Rejected_Cut_Count}</span></p>
         </div>
 
         <div className="oven-temp">
-          <h3>Oven Temps</h3>
-          <p>Anode Oven Z1 Temp: <span>{dashboardData?.Anode_Oven_Z1_Temp}</span></p>
-          <p>Anode Oven Z2 Temp: <span>{dashboardData?.Anode_Oven_Z2_Temp}</span></p>
+          <h3>Oven Temps   </h3>
+          <p>Anode Oven Z1 Temp: <span className="output-field">{dashboardData?.Anode_Oven_Z1_Temp} °C </span></p>
+          <p>Anode Oven Z2 Temp: <span className="output-field">{dashboardData?.Anode_Oven_Z2_Temp} °C </span></p>
         </div>
 
         <div className="weighing">
-          <h3>Weighing</h3>
-          <p>Anode Accepted Count: <span>{dashboardData?.Anode_Weighing_Accepted_Count}</span></p>
-          <p>Anode Rejected Count: <span>{dashboardData?.Anode_Weighing_Rejected_Count}</span></p>
+          <h3>Weighing  </h3> 
+          <p>Anode Accepted Count: <span className="output-field">{dashboardData?.Anode_Weighing_Accepted_Count}</span></p>
+          <p>Anode Rejected Count: <span className="output-field">{dashboardData?.Anode_Weighing_Rejected_Count}</span></p>
         </div>
 
       </div>
@@ -198,35 +200,39 @@ return (
       <div className="cathode-container">
 
         <div className="cathode-cuts">
-          <h3>Cathode Cuts</h3>
-          <p>Total Cut Count: <span>{dashboardData?.Cathode_Total_Cut_Count}</span></p>
-          <p>Accepted Cut Count: <span>{dashboardData?.Cathode_Accepted_Cut_Count}</span></p>
-          <p>Rejected Cut Count: <span>{dashboardData?.Cathode_Rejected_Cut_Count}</span></p>
+          <h3>Cathode Batch ID <span className="output-field">{dashboardData?.Cathode_Mixer_Batch_ID}</span>  </h3>
+          
+        </div>
+        <div className="cathode-cuts">
+          <h3>Cathode Cuts </h3> 
+          <p>Total Cut Count: <span className="output-field">{dashboardData?.Cathode_Total_Cut_Count}</span></p>
+          <p>Accepted Cut Count: <span className="output-field">{dashboardData?.Cathode_Accepted_Cut_Count}</span></p>
+          <p>Rejected Cut Count: <span className="output-field">{dashboardData?.Cathode_Rejected_Cut_Count}</span></p>
         </div>
 
         <div className="oven-temp">
-          <h3>Oven Temps</h3>
-          <p>Cathode Oven Z1 Temp: <span>{dashboardData?.Cathode_Oven_Z1_Temp}</span></p>
-          <p>Cathode Oven Z2 Temp: <span>{dashboardData?.Cathode_Oven_Z2_Temp}</span></p>
+          <h3>Oven Temps  </h3>  
+          <p>Cathode Oven Z1 Temp: <span className="output-field">{dashboardData?.Cathode_Oven_Z1_Temp} °C </span></p>
+          <p>Cathode Oven Z2 Temp: <span className="output-field">{dashboardData?.Cathode_Oven_Z2_Temp} °C </span></p>
         </div>
 
         <div className="weighing">
-          <h3>Weighing</h3>
-          <p>Cathode Accepted Count: <span>{dashboardData?.Cathode_Weighing_Accepted_Count}</span></p>
-          <p>Cathode Rejected Count: <span>{dashboardData?.Cathode_Weighing_Rejected_Count}</span></p>
+          <h3>Weighing  </h3> 
+          <p>Cathode Accepted Count: <span className="output-field">{dashboardData?.Cathode_Weighing_Accepted_Count}</span></p>
+          <p>Cathode Rejected Count: <span className="output-field">{dashboardData?.Cathode_Weighing_Rejected_Count}</span></p>
         </div>
 
       </div>
 
       <div className="other-container">
         <div className="others">
-           <h3>Other</h3>
-       < p>Winding Machine Production: <span>{dashboardData?.Winding_Machine_Production}</span></p>
-        <p>Tab to Terminal Station Production: <span>{dashboardData?.Tab_to_terminal_Station_Production}</span></p>
-        <p>Canister Station Production: <span>{dashboardData?.Canister_Station_Production}</span></p>
-        <p>Filling Station Production Qty: <span>{dashboardData?.Filling_Station_Production_Qty}</span></p>
+        <h3>Other </h3>   
+        <p>Winding Machine Production: <span className="output-field">{dashboardData?.Winding_Machine_Production}</span></p>
+        <p>Tab to Terminal Station Production: <span className="output-field">{dashboardData?.Tab_to_terminal_Station_Production}</span></p>
+        <p>Canister Station Production: <span className="output-field">{dashboardData?.Canister_Station_Production}</span></p>
+        <p>Filling Station Production Qty: <span className="output-field">{dashboardData?.Filling_Station_Production_Qty}</span></p>
         </div>
-       
+      
       </div>
 
     </div>
